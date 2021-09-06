@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 // @ts-ignore
 import BPMNModeler from "bpmn-js/lib/Modeler";
 // @ts-ignore
@@ -14,25 +14,28 @@ export function Modeler() {
 
   let modeler: any;
 
-  if (diagrama.length > 0) {
-    modeler = new BPMNModeler({
-      container,
-      keyboard: {
-        bindTo: document,
-      },
-    });
-
-    modeler
-      .importXML(diagrama)
-      .then((props: { warnings: string | any[] }) => {
-        if (props.warnings.length) {
-          console.log("Warnings", props.warnings);
-        }
-      })
-      .catch((err: any) => {
-        console.log("error", err);
+  useEffect(() => {
+    if (diagrama.length > 0) {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      modeler = new BPMNModeler({
+        container,
+        keyboard: {
+          bindTo: document,
+        },
       });
-  }
+
+      modeler
+        .importXML(diagrama)
+        .then((props: { warnings: string | any[] }) => {
+          if (props.warnings.length) {
+            console.log("Warnings", props.warnings);
+          }
+        })
+        .catch((err: any) => {
+          console.log("error", err);
+        });
+    }
+  });
 
   const handleClick = () => {
     // console.log(modeler.toXML);
