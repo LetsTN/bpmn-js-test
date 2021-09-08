@@ -1,34 +1,41 @@
-import React, { useEffect } from "react";
-// @ts-ignore
-import BpmnViewer from "bpmn-js";
-import { diagrama } from "../../assets/diagrama";
+/* eslint-disable no-unused-vars */
+import { BpmnViewerInstance } from "../../services/viewer";
+import { useCallback } from "react";
+import { useMemo } from "react";
+import { useEffect } from "react";
+import { Container } from "./styles";
 
-export function Viewer() {
-  const viewer = new BpmnViewer();
+interface DiagramViewProps {
+  diagramXml: string;
+}
+
+export function Viewer({ diagramXml }: DiagramViewProps) {
+  const idDom = useMemo(() => {
+    return `bpmnContainer`;
+  }, []);
+
+  const removeOldDiagramOfDom = useCallback(() => {
+    const element = document.getElementById(idDom);
+    if (element) {
+      element.innerHTML = "";
+    }
+  }, [idDom]);
 
   useEffect(() => {
-    viewer.attachTo("#viewer");
+    if (diagramXml) {
+      const BpmnModeler = new BpmnViewerInstance({
+        idContainer: idDom,
+      });
 
-    viewer.importXML(diagrama, function (err: any) {
-      if (err) {
-        return console.error("could not import BPMN 2.0 diagram", err);
-      }
+      BpmnModeler.openDiagram(diagramXml);
+    }
 
-      let canvas = viewer.get("canvas");
-
-      canvas.zoom("fit-viewport");
-    });
-  });
+    return removeOldDiagramOfDom;
+  }, [diagramXml, idDom, removeOldDiagramOfDom]);
 
   return (
-    <div
-      id="viewer"
-      style={{
-        border: "1px solid #000000",
-        height: "90vh",
-        width: "90vw",
-        margin: "auto",
-      }}
-    ></div>
+    <Container>
+      <div className="div-container-bpmn" id={idDom}></div>
+    </Container>
   );
 }

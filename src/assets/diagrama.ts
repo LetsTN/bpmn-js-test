@@ -9,5 +9,5 @@ export const diagrama = `<?xml version="1.0" encoding="UTF-8"?>
         <dc:Bounds x="412" y="240" width="36" height="36" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
-  </bpmndi:BPMNDiagram>
+  </bpmndi:BPMNDiagram> 
 </bpmn2:definitions>`;
